@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="icon" href="/img/check-double.svg" type="image/x-icon">
+    <link rel="apple-touch-icon" href="/img/check-double.svg">
+
+    <link rel="stylesheet" href="/css/base.css">
+    <link rel="stylesheet" href="/css/header-footer.css">
+    <link rel="stylesheet" href="/css/content.css">
+    <link rel="stylesheet" href="/css/modals.css">
+    <link rel="stylesheet" href="/css/components.css">
+
+    <title>Eventos Para Todos</title>
+</head>
+
+<body>
+    <header>
+        <div class="logo">
+            <i class="fa-solid fa-check-double fa-beat"></i>
+            <span>Eventos Para Todos</span>
+        </div>
+
+        <div class="search-container">
+            <input type="text" id="search-input" placeholder="Buscar evento...">
+            <button id="search-btn">
+                <i class="fas fa-search"></i>
+            </button>
+        </div>
+
+        <div class="action-buttons">
+            <button class="btn btn-add" id="add-event-btn">
+                <i class="fas fa-plus"></i> Adicionar Evento
+            </button>
+            <button class="btn btn-remove" id="remove-event-btn">
+                <i class="fas fa-trash"></i> Remover Evento
+            </button>
+        </div>
+    </header>
+
+    <main>
+        <div class="container">
+            <aside class="filters">
+                <button class="filter-btn active" data-filter="all">
+                    <i class="fas fa-calendar-alt"></i> Todos Eventos
+                </button>
+                <button class="filter-btn" data-filter="Balada">
+                    <i class="fas fa-glass-cheers"></i> Balada
+                </button>
+                <button class="filter-btn" data-filter="Infantil">
+                    <i class="fas fa-child"></i> Infantil
+                </button>
+                <button class="filter-btn" data-filter="Shows">
+                    <i class="fas fa-music"></i> Shows
+                </button>
+                <button class="filter-btn" data-filter="Workshop">
+                    <i class="fas fa-chalkboard-teacher"></i> Workshop
+                </button>
+            </aside>
+
+            <div class="content">
+                <h2 class="section-title">
+                    <i class="fas fa-fire"></i> Próximos 5 Eventos
+                </h2>
+                <div class="carousel">
+                    <div class="carousel-item active" id="carousel-item-1"></div>
+                    <div class="carousel-item" id="carousel-item-2"></div>
+                    <div class="carousel-item" id="carousel-item-3"></div>
+                    <div class="carousel-item" id="carousel-item-4"></div>
+                    <div class="carousel-item" id="carousel-item-5"></div>
+                    <div class="carousel-indicators" id="carousel-indicators"></div>
+                </div>
+
+                <h2 class="section-title">
+                    <i class="fas fa-star"></i> Eventos Que Estão Bombando
+                </h2>
+                <div class="events-grid" id="featured-events"></div>
+            </div>
+        </div>
+        <div class="load-more-container">
+            <button id="load-more-btn" class="load-more-btn">Carregar Mais</button>
+        </div>
+    </main>
+
+    <footer>
+        <div class="footer-content">
+            <p class="copyright">© 2025 - Copyright todos os direitos reservados</p>
+            <p class="developer">Ambiente de Gerenciamento de Eventos desenvolvido por Alex Ritzmann</p>
+            <p class="partnership">Parceria com Lab 365</p>
+            <div class="social-links">
+                <a href="https://github.com/alexritzmann" target="_blank">
+                    <i class="fab fa-github"></i><span>&nbsp;@alexritzmann</span>
+                </a>
+                <a href="https://www.instagram.com/lab365_/" target="_blank">
+                    <i class="fab fa-instagram"></i><span>&nbsp;@lab365_</span>
+                </a>
+            </div>
+        </div>
+    </footer>
+
+    <div class="modal" id="add-event-modal">
+        <div class="modal-content">
+            <span class="close-modal">&times;</span>
+            <h2 class="modal-title">Adicionar Novo Evento</h2>
+            <form id="event-form">
+                <div class="form-group">
+                    <label for="event-name" class="required">Nome do Evento</label>
+                    <input type="text" id="event-name" class="form-control" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="event-description" class="required">Descrição</label>
+                    <textarea id="event-description" class="form-control" rows="4" required></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label for="event-location" class="required">Local</label>
+                    <input placeholder="Ex: Museu Sambaqui, Joinville" type="text" id="event-location"
+                        class="form-control" required>
+                    <a href="#" id="map-link" class="map-link" target="_blank">
+                        <i class="fas fa-map-marker-alt"></i> Ver no mapa
+                    </a>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label class="required" for="event-type">Tipo de Evento</label>
+                        <select id="event-type" class="form-control">
+                            <option value="">Selecione</option>
+                            <option value="Balada">Balada</option>
+                            <option value="Infantil">Infantil</option>
+                            <option value="Shows">Shows</option>
+                            <option value="Workshop">Workshop</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="required" for="event-date">Data do Evento</label>
+                        <input type="date" id="event-date" class="form-control" required>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label class="required" for="ticket-type">Tipo de Ingresso</label>
+                        <select id="ticket-type" class="form-control">
+                            <option value="">Selecione</option>
+                            <option value="gratuito">Gratuito</option>
+                            <option value="pago">Pago</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group" id="price-group">
+                        <label for="event-price" class="required">Preço (R$)</label>
+                        <input type="number" id="event-price" class="form-control" min="0" step="0.01">
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="event-tax" class="required">Taxa (%)</label>
+                        <input type="number" id="event-tax" class="form-control" min="0" max="100" step="0.1" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="event-rating">Classificação Etária</label>
+                        <select id="event-rating" class="form-control">
+                            <option value="Livre">Livre</option>
+                            <option value="+12">+12</option>
+                            <option value="+14">+14</option>
+                            <option value="+16">+16</option>
+                            <option value="+18">+18</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="event-image" class="required">Imagem do Evento</label>
+
+                    <div class="custom-file-upload">
+                        <input type="file" id="event-image" accept="image/*" style="display: none;">
+
+                        <button type="button" class="custom-file-button">
+                            <i class="fas fa-image"></i> Escolher Imagem
+                        </button>
+
+                        <span class="file-name" id="file-name">Nenhum arquivo selecionado</span>
+                    </div>
+
+                    <div id="image-preview" style="margin-top: 10px; display: none;">
+                        <img id="preview-img" src="#" alt="Pré-visualização">
+                    </div>
+                </div>
+
+                <button type="submit" class="submit-btn">Cadastrar Evento</button>
+            </form>
+        </div>
+    </div>
+
+    <div class="modal" id="event-detail-modal">
+        <div class="modal-content">
+            <span class="close-modal">&times;</span>
+            <div id="event-detail-content">
+            </div>
+        </div>
+    </div>
+
+    <div class="modal" id="remove-events-modal">
+        <div class="modal-content">
+            <span class="close-modal">&times;</span>
+            <h2 class="modal-title">Remover Eventos</h2>
+
+            <div id="remove-events-container">
+            </div>
+
+            <div class="pagination" id="pagination">
+            </div>
+        </div>
+    </div>
+    <script src="/js/eventsData.js"></script>
+    <script src="/js/utils.js"></script>
+    <script src="/js/carousel.js"></script>
+    <script src="/js/eventsDisplay.js"></script>
+    <script src="/js/filtersSearch.js"></script>
+    <script src="/js/eventActions.js"></script>
+    <script src="/js/eventForm.js"></script>
+    <script src="/js/eventDetails.js"></script>
+    <script src="/js/uiSetup.js"></script>
+    <script src="/js/main.js"></script>
+
+</body>
+
+</html>
