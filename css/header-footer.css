@@ -27,6 +27,26 @@ header {
     font-size: 1.8rem;
 }
 
+.menu-routes{
+    display: flex;
+    flex-direction: row;
+    gap: 2rem;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.menu-routes li a{
+    text-decoration: none;
+    color: var(--accent);
+    font-weight: bold;
+    font-size: 1.2rem;
+}
+
+.menu-routes li a:hover{
+    color: var(--accent-dark);
+}
+
 .search-container {
     display: flex;
     flex-grow: 1;
