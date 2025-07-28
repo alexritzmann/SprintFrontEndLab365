@@ -1,7 +1,7 @@
 
 // eventsDisplay.js
 let currentPage = 1;
-const eventsPerPage = 8;
+const eventsPerPage = 100;
 
 function displayFeaturedEvents(events, isSearch = false) {
   const featuredContainer = document.getElementById('featured-events');
