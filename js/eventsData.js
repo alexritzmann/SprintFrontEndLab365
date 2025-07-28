@@ -1,5 +1,5 @@
 
-
+// eventsData.js
 let allEvents = [];
 
 const sampleEvents = [
@@ -17,6 +17,9 @@ const sampleEvents = [
     image: "/img/Festival de Verão de Florianópolis.png",
     likes: 0,
     purchased: false,
+    hasSeats: true,
+    totalSeats: 64,
+    bookedSeats: [1, 2, 3, 10, 15] 
   },
   {
     id: 2,
@@ -62,6 +65,9 @@ const sampleEvents = [
     image: "https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?crop=entropy&cs=tinysrgb&fit=crop&fm=jpg&h=600&w=800",
     likes: 0,
     purchased: false,
+    hasSeats: true,
+    totalSeats: 48,
+    bookedSeats: [5, 6, 7, 8]
   },
   {
     id: 5,
@@ -122,6 +128,9 @@ const sampleEvents = [
     image: "https://focalizando.com.br/sites/default/files/inline-images/cantor-sertanejo-rodolfo.webp",
     likes: 0,
     purchased: false,
+    hasSeats: true,
+    totalSeats: 32,
+    bookedSeats: [1, 2, 3]
   },
   {
     id: 9,
@@ -272,6 +281,9 @@ const sampleEvents = [
     image: "https://www.sideropolis.sc.gov.br/uploads/sites/447/2023/07/DSC_1722-1024x678.jpg",
     likes: 0,
     purchased: false,
+    hasSeats: true,
+    totalSeats: 56,
+    bookedSeats: [10, 11, 12]
   },
   {
     id: 19,
@@ -332,6 +344,9 @@ const sampleEvents = [
     image: "https://www.dancaempauta.com.br/wp-content/uploads/2017/06/aba_festival-danca-joinville.jpg",
     likes: 1,
     purchased: false,
+    hasSeats: true,
+    totalSeats: 64,
+    bookedSeats: [1, 2, 3, 4, 5]
   },
   {
     id: 23,

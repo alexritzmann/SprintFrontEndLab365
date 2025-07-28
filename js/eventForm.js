@@ -1,11 +1,44 @@
 
-
+// eventForm.js
 function setupEventForm() {
   const form = document.getElementById("event-form");
   const ticketTypeSelect = document.getElementById("ticket-type");
   const priceGroup = document.getElementById("price-group");
   const priceInput = document.getElementById("event-price");
   const taxInput = document.getElementById("event-tax");
+
+  const seatSelectionGroup = document.createElement('div');
+  seatSelectionGroup.className = 'form-group';
+  seatSelectionGroup.innerHTML = `
+      <label>Assentos Marcados</label>
+      <div class="radio-group">
+          <label>
+              <input type="radio" name="hasSeats" id="hasSeats-yes" value="sim"> Sim
+          </label>
+          <label>
+              <input type="radio" name="hasSeats" id="hasSeats-no" value="nao" checked> Não
+          </label>
+      </div>
+      <div id="seat-quantity-group" style="display: none; margin-top: 10px;">
+          <label for="seat-quantity" class="required">Quantidade de Assentos</label>
+          <input type="number" id="seat-quantity" class="form-control" min="1" step="1">
+      </div>
+  `;
+
+  const formGroups = form.querySelectorAll('.form-group');
+  const lastFormGroup = formGroups[formGroups.length - 1];
+  form.insertBefore(seatSelectionGroup, lastFormGroup);
+
+  document.getElementById('hasSeats-yes').addEventListener('change', function() {
+      document.getElementById('seat-quantity-group').style.display = 'block';
+      document.getElementById('seat-quantity').required = true;
+  });
+
+  document.getElementById('hasSeats-no').addEventListener('change', function() {
+      document.getElementById('seat-quantity-group').style.display = 'none';
+      document.getElementById('seat-quantity').required = false;
+      document.getElementById('seat-quantity').value = '';
+  });
 
   function updatePriceFieldsState() {
     if (ticketTypeSelect.value === "gratuito") {
@@ -78,7 +111,11 @@ function setupEventForm() {
       image: imageBase64,
       comments: Math.floor(Math.random() * 200),
       purchased: false,
-      likes: 0
+      likes: 0,
+      hasSeats: document.getElementById('hasSeats-yes').checked,
+      totalSeats: document.getElementById('hasSeats-yes').checked ? 
+        parseInt(document.getElementById('seat-quantity').value) : 0,
+      bookedSeats: []
     };
 
     let events = JSON.parse(localStorage.getItem("events")) || [];
@@ -89,6 +126,8 @@ function setupEventForm() {
     form.reset();
     ticketTypeSelect.value = "";
     document.getElementById("event-type").value = "";
+    document.getElementById('hasSeats-no').checked = true;
+    document.getElementById('seat-quantity-group').style.display = 'none';
     updatePriceFieldsState();
     alert("Evento cadastrado com sucesso!");
   });
@@ -99,6 +138,8 @@ function validateEventForm() {
   const ticketType = document.getElementById("ticket-type").value;
   const price = document.getElementById("event-price").value;
   const tax = document.getElementById("event-tax").value;
+  const hasSeats = document.getElementById('hasSeats-yes').checked;
+  const seatQuantity = document.getElementById('seat-quantity').value;
   let isValid = true;
 
   document.querySelectorAll(".error-message").forEach(el => el.remove());
@@ -120,6 +161,12 @@ function validateEventForm() {
   
   if (!tax || isNaN(tax) || parseFloat(tax) < 0) {
     showError("event-tax", "Por favor, informe uma taxa válida");
+    isValid = false;
+  }
+  
+  // Validação do campo de assentos
+  if (hasSeats && (!seatQuantity || isNaN(seatQuantity) || parseInt(seatQuantity) <= 0)) {
+    showError("seat-quantity", "Por favor, informe uma quantidade válida de assentos");
     isValid = false;
   }
   

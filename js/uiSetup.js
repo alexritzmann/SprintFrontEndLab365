@@ -1,5 +1,5 @@
 
-
+// uiSetup.js
 function setupActionButtons() {
   document.getElementById("add-event-btn").addEventListener("click", function() {
     document.getElementById("add-event-modal").classList.add("active");

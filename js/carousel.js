@@ -1,5 +1,5 @@
 
-
+// carousel.js
 function initCarousel(events) {
   const today = new Date();
   today.setHours(0, 0, 0, 0);
@@ -10,6 +10,13 @@ function initCarousel(events) {
     const eventDate = new Date(event.date);
     eventDate.setHours(0, 0, 0, 0);
     return eventDate >= today;
+  });
+
+  document.querySelector('.carousel').addEventListener('click', function(e) {
+  if (e.target.closest('.view-detail')) {
+    const eventId = parseInt(e.target.closest('.view-detail').dataset.id);
+    showEventDetails(eventId);
+  }
   });
 
   futureEvents.sort((a, b) => new Date(a.date) - new Date(b.date));
@@ -43,13 +50,6 @@ function initCarousel(events) {
   });
 
   startCarouselRotation();
-
-  document.querySelectorAll(".view-detail").forEach((btn) => {
-    btn.addEventListener("click", function () {
-      const eventId = parseInt(this.dataset.id);
-      showEventDetails(eventId);
-    });
-  });
 }
 
 function startCarouselRotation() {

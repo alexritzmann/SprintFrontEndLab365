@@ -1,5 +1,5 @@
 
-
+// eventDetails.js
 function showEventDetails(eventId) {
   const events = JSON.parse(localStorage.getItem("events")) || sampleEvents;
   const event = events.find(e => e.id === eventId);
@@ -51,6 +51,41 @@ function showEventDetails(eventId) {
     </div>
   `;
   
+  if (event.hasSeats) {
+      detailsContent.innerHTML += `
+          <div class="seats-container">
+              <div class="seat-label">Selecione seus assentos:</div>
+              <div class="seats-grid" id="seats-grid"></div>
+              <button class="btn-buy" id="btn-select-seats" disabled>Selecionar Assentos</button>
+          </div>
+      `;
+      
+      generateSeatsGrid(event);
+      document.getElementById('btn-select-seats').addEventListener('click', function() {
+      const selectedSeats = document.querySelectorAll('.seat.selected');
+      const seatNumbers = Array.from(selectedSeats).map(seat => parseInt(seat.dataset.seat));
+      
+      let events = JSON.parse(localStorage.getItem('events')) || [];
+      const eventIndex = events.findIndex(e => e.id === event.id);
+      
+      if (eventIndex !== -1) {
+          events[eventIndex].bookedSeats = [...events[eventIndex].bookedSeats, ...seatNumbers];
+          
+          localStorage.setItem('events', JSON.stringify(events));
+          
+          alert(`Assentos ${seatNumbers.join(', ')} reservados com sucesso!`);
+          
+          document.getElementById('event-detail-modal').classList.remove('active');
+      }});
+  } else {
+      detailsContent.innerHTML += `
+          <button class="btn-buy ${event.purchased ? 'purchased' : ''}" 
+                  data-id="${event.id}" id="btn-buy-ticket">
+              ${event.purchased ? 'Ingresso Adquirido' : 'Comprar Ingresso'}
+          </button>
+      `;
+  }
+
   document.getElementById("event-detail-modal").classList.add("active");
   
   document.querySelector(".like-btn-detail").addEventListener("click", function() {
@@ -98,3 +133,35 @@ function showEventDetails(eventId) {
   });
 }
 
+function generateSeatsGrid(event) {
+    const seatsGrid = document.getElementById('seats-grid');
+    seatsGrid.innerHTML = '';
+    
+    for (let i = 1; i <= event.totalSeats; i++) {
+        const seat = document.createElement('div');
+        seat.className = 'seat';
+        seat.dataset.seat = i;
+        seat.textContent = i;
+        
+        if (event.bookedSeats.includes(i)) {
+            seat.classList.add('booked');
+            seat.title = 'Assento reservado';
+        } else {
+            seat.addEventListener('click', function() {
+                this.classList.toggle('selected');
+                updateSelectedSeats(event);
+            });
+        }
+        
+        seatsGrid.appendChild(seat);
+    }
+}
+
+function updateSelectedSeats(event) {
+    const selectedSeats = document.querySelectorAll('.seat.selected');
+    const btnSelect = document.getElementById('btn-select-seats');
+    
+    btnSelect.disabled = selectedSeats.length === 0;
+    btnSelect.textContent = selectedSeats.length > 0 ? 
+        `Comprar ${selectedSeats.length} ingresso(s)` : 'Selecionar Assentos';
+}

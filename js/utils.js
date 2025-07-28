@@ -1,5 +1,5 @@
 
-
+// util.js
 function formatDate(dateString) {
   if (!dateString) return "Data não definida";
   const date = new Date(dateString);

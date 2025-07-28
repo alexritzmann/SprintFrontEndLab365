@@ -1,5 +1,5 @@
 
-
+// filtersSearch.js
 function filterEvents(filterType) {
   currentPage = 1;
   

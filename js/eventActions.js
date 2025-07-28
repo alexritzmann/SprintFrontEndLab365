@@ -1,5 +1,5 @@
 
-
+// eventActions.js
 function likeEvent(eventId) {
   let events = JSON.parse(localStorage.getItem("events")) || [];
   const eventIndex = events.findIndex(e => e.id === eventId);
@@ -43,26 +43,11 @@ function likeEvent(eventId) {
 }
 
 function updateLikeCounts(eventId, newCount) {
-  const cardCounters = document.querySelectorAll(`.like-btn[data-id="${eventId}"] .like-count`);
-  cardCounters.forEach(counter => {
+  document.querySelectorAll(`[data-id="${eventId}"] .like-count`).forEach(counter => {
     counter.textContent = newCount;
     counter.classList.add("liked");
     setTimeout(() => counter.classList.remove("liked"), 500);
   });
-  
-  const detailCounter = document.querySelector(`#event-detail-content .like-count`);
-  if (detailCounter) {
-    detailCounter.textContent = newCount;
-    detailCounter.classList.add("liked");
-    setTimeout(() => detailCounter.classList.remove("liked"), 500);
-  }
-  
-  const carouselCounter = document.querySelector(`.carousel-item .like-count[data-id="${eventId}"]`);
-  if (carouselCounter) {
-    carouselCounter.textContent = newCount;
-    carouselCounter.classList.add("liked");
-    setTimeout(() => carouselCounter.classList.remove("liked"), 500);
-  }
 }
 
 function showRemoveEventsModal(page) {

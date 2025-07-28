@@ -1,5 +1,5 @@
 
-
+// eventsDisplay.js
 let currentPage = 1;
 const eventsPerPage = 8;
 
@@ -28,7 +28,8 @@ function displayFeaturedEvents(events, isSearch = false) {
     const card = document.createElement('div');
     card.className = 'event-card';
     card.dataset.id = event.id;
-    card.innerHTML = `
+    
+    card.innerHTML = `    
       <div class="event-image" style="background-image: url('${event.image}')"></div>
       <div class="event-content">
         <h3 class="event-title">${event.name}</h3>
@@ -43,23 +44,12 @@ function displayFeaturedEvents(events, isSearch = false) {
       <div class="remove-overlay">
         <button class="remove-btn">Remover Evento</button>
       </div>
+      ${event.hasSeats && event.totalSeats > 0 
+        ? `<div class="event-seats">Assentos: ${event.totalSeats - (event.bookedSeats?.length || 0)}/${event.totalSeats} disponíveis</div>`
+        : ''}
     `;
     
     featuredContainer.appendChild(card);
-  });
-  
-  document.querySelectorAll('.like-btn').forEach(btn => {
-    btn.addEventListener('click', function() {
-      const eventId = parseInt(this.dataset.id);
-      likeEvent(eventId);
-    });
-  });
-  
-  document.querySelectorAll('.view-detail').forEach(btn => {
-    btn.addEventListener('click', function() {
-      const eventId = parseInt(this.dataset.id);
-      showEventDetails(eventId);
-    });
   });
   
   updateLoadMoreButton(events.length);
