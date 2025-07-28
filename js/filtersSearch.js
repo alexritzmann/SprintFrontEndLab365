@@ -1,7 +1,10 @@
 
 // filtersSearch.js
+let currentFilter = "all";
+
 function filterEvents(filterType) {
   currentPage = 1;
+  currentFilter = filterType;
   
   if (filterType === "all") {
     displayFeaturedEvents(allEvents);
@@ -14,6 +17,7 @@ function filterEvents(filterType) {
 function searchEvents(searchTerm) {
   currentPage = 1;
   const term = searchTerm.toLowerCase().trim();
+  currentFilter = "all";
   
   if (!term) {
     displayFeaturedEvents(allEvents);

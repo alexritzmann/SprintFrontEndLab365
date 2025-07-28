@@ -2,14 +2,16 @@
 // main.js
 document.addEventListener("DOMContentLoaded", function () {
   initializeEvents();
+  const events = JSON.parse(localStorage.getItem("events")) || sampleEvents;
+  
   document.getElementById("load-more-btn").addEventListener("click", loadMoreEvents);
-  initCarousel(allEvents);
+  initCarousel(events);
   setupFilters();
   setupActionButtons();
   setupEventForm();
   updateMapLink();
   setupImagePreview();
-  displayFeaturedEvents(allEvents);
+  filterEvents(currentFilter);
 });
 
 

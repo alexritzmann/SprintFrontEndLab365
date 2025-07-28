@@ -1,8 +1,10 @@
 
 // eventsDisplay.js
 let currentPage = 1;
-const eventsPerPage = 100;
+const eventsPerPage = 12;
 
+/*************  ✨ Windsurf Command ⭐  *************/
+/*******  5aa7847a-eeae-4e25-9584-c108fc94c0eb  *******/
 function displayFeaturedEvents(events, isSearch = false) {
   const featuredContainer = document.getElementById('featured-events');
   
@@ -15,7 +17,7 @@ function displayFeaturedEvents(events, isSearch = false) {
     return;
   }
   
-  let eventsToDisplay = [...events];
+  let eventsToDisplay = Array.isArray(events) ? [...events] : [];
   if (!isSearch) {
     eventsToDisplay = eventsToDisplay.sort((a, b) => b.likes - a.likes);
   }
@@ -75,8 +77,14 @@ function loadMoreEvents() {
 
 function updateEvents() {
   currentPage = 1;
-  allEvents = JSON.parse(localStorage.getItem('events')) || sampleEvents;
-  initCarousel(allEvents);
-  displayFeaturedEvents(allEvents);
+  const events = JSON.parse(localStorage.getItem('events')) || sampleEvents;
+  initCarousel(events);
+  
+  if (currentFilter === "all") {
+    displayFeaturedEvents(events);
+  } else {
+    const filteredEvents = events.filter(event => event.type === currentFilter);
+    displayFeaturedEvents(filteredEvents);
+  }
 }
 

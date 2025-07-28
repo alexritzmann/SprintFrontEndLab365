@@ -34,7 +34,12 @@ function likeEvent(eventId) {
     
     const featuredContainer = document.getElementById("featured-events");
     if (featuredContainer) {
-      displayFeaturedEvents(events);
+      if (currentFilter === "all") {
+        displayFeaturedEvents(events);
+      } else {
+        const filteredEvents = events.filter(event => event.type === currentFilter);
+        displayFeaturedEvents(filteredEvents);
+      }
     }
     
     return true;
