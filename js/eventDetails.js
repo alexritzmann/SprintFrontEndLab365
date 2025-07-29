@@ -4,8 +4,6 @@ function showEventDetails(eventId) {
   const events = JSON.parse(localStorage.getItem("events")) || sampleEvents;
   const event = events.find(e => e.id === eventId);
   
-  if (!event) return;
-  
   const formattedDate = formatDate(event.date);
   const priceDisplay = event.ticketType === "gratuito" ? 
     "Gratuito" : `R$ ${event.price.toFixed(2)} + taxa de ${event.tax}%`;
@@ -43,24 +41,24 @@ function showEventDetails(eventId) {
       <button class="like-btn-detail" data-id="${event.id}">
         <i class="fas fa-heart"></i> Curtir
       </button>
-      <button class="btn-buy ${event.purchased ? "purchased" : ""}" 
-              data-id="${event.id}">
-        ${event.purchased ? "Ingresso Adquirido" : "Comprar Ingresso"}
-      </button>
       <button class="btn-close">Fechar</button>
     </div>
   `;
-  
-  if (event.hasSeats) {
+
+  if (!event.purchased) {
+    const detailButtons = document.querySelector('.detail-buttons');
+    
+    if (event.hasSeats && event.totalSeats > 0) {
       detailsContent.innerHTML += `
-          <div class="seats-container">
-              <div class="seat-label">Selecione seus assentos:</div>
-              <div class="seats-grid" id="seats-grid"></div>
-              <button class="btn-buy" id="btn-select-seats" disabled>Selecionar Assentos</button>
-          </div>
+        <div class="seats-container">
+          <div class="seat-label">Selecione seus assentos:</div>
+          <div class="seats-grid" id="seats-grid"></div>
+          <button class="btn-buy" id="btn-select-seats" disabled>Selecionar Assentos</button>
+        </div>
       `;
       
       generateSeatsGrid(event);
+
       document.getElementById('btn-select-seats').addEventListener('click', function() {
       const selectedSeats = document.querySelectorAll('.seat.selected');
       const seatNumbers = Array.from(selectedSeats).map(seat => parseInt(seat.dataset.seat));
@@ -77,14 +75,20 @@ function showEventDetails(eventId) {
           
           document.getElementById('event-detail-modal').classList.remove('active');
       }});
+      const buyBtn = document.getElementById('btn-buy-ticket');
+    if (buyBtn) buyBtn.style.display = 'none';
+
   } else {
-      detailsContent.innerHTML += `
-          <button class="btn-buy ${event.purchased ? 'purchased' : ''}" 
-                  data-id="${event.id}" id="btn-buy-ticket">
-              ${event.purchased ? 'Ingresso Adquirido' : 'Comprar Ingresso'}
-          </button>
-      `;
+      const buyButton = document.createElement('button');
+      buyButton.className = 'btn-buy';
+      buyButton.id = 'btn-buy-ticket';
+      buyButton.dataset.id = event.id;
+      buyButton.textContent = 'Comprar Ingresso';
+      
+      detailButtons.insertBefore(buyButton, detailButtons.querySelector('.btn-close'));
+    }
   }
+
 
   document.getElementById("event-detail-modal").classList.add("active");
   
@@ -112,9 +116,9 @@ function showEventDetails(eventId) {
     }
   });
   
-  const buyBtn = document.querySelector(".btn-buy");
-  if (!event.purchased) {
-    buyBtn.addEventListener("click", function() {
+  const buyBtn = document.getElementById('btn-buy-ticket');
+  if (buyBtn) {
+    buyBtn.addEventListener('click', function() {
       event.purchased = true;
       const events = JSON.parse(localStorage.getItem("events")) || [];
       const index = events.findIndex(e => e.id === event.id);
@@ -127,6 +131,7 @@ function showEventDetails(eventId) {
       this.textContent = "Ingresso Adquirido";
     });
   }
+
   
   document.querySelector(".btn-close").addEventListener("click", function() {
     document.getElementById("event-detail-modal").classList.remove("active");
@@ -134,8 +139,13 @@ function showEventDetails(eventId) {
 }
 
 function generateSeatsGrid(event) {
-    const seatsGrid = document.getElementById('seats-grid');
-    seatsGrid.innerHTML = '';
+    if (!event.hasSeats || event.totalSeats <= 0) return;
+
+  const seatsGrid = document.getElementById('seats-grid');
+  if (!seatsGrid) return;
+  
+  seatsGrid.innerHTML = '';
+
     
     for (let i = 1; i <= event.totalSeats; i++) {
         const seat = document.createElement('div');
