@@ -1,7 +1,7 @@
 
 // eventsDisplay.js
 let currentPage = 1;
-const eventsPerPage = 12;
+const eventsPerPage = 100;
 let isSearchActive = false;
 let searchTerm = "";
 
