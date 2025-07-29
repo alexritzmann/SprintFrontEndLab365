@@ -5,6 +5,8 @@ let currentFilter = "all";
 function filterEvents(filterType) {
   currentPage = 1;
   currentFilter = filterType;
+  isSearchActive = false;
+  searchTerm = "";
   
   if (filterType === "all") {
     displayFeaturedEvents(allEvents);
@@ -14,19 +16,18 @@ function filterEvents(filterType) {
   }
 }
 
-function searchEvents(searchTerm) {
-  currentPage = 1;
-  const term = searchTerm.toLowerCase().trim();
-  currentFilter = "all";
+function searchEvents(term) {
+  searchTerm = term.toLowerCase().trim();
+  isSearchActive = searchTerm !== "";
   
-  if (!term) {
+  if (!isSearchActive) {
     displayFeaturedEvents(allEvents);
     return;
   }
 
   const results = allEvents.filter(event => 
-    event.name.toLowerCase().includes(term) || 
-    event.type.toLowerCase().includes(term)
+    event.name.toLowerCase().includes(searchTerm) || 
+    event.type.toLowerCase().includes(searchTerm)
   );
 
   displayFeaturedEvents(results, true);

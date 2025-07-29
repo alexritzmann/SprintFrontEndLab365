@@ -34,13 +34,16 @@ function likeEvent(eventId) {
     
     const featuredContainer = document.getElementById("featured-events");
     if (featuredContainer) {
-      if (currentFilter === "all") {
+      if (isSearchActive) {
+        searchEvents(searchTerm);
+      } else if (currentFilter === "all") {
         displayFeaturedEvents(events);
       } else {
         const filteredEvents = events.filter(event => event.type === currentFilter);
         displayFeaturedEvents(filteredEvents);
       }
     }
+
     
     return true;
   }

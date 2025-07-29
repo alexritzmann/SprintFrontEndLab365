@@ -2,9 +2,9 @@
 // eventsDisplay.js
 let currentPage = 1;
 const eventsPerPage = 12;
+let isSearchActive = false;
+let searchTerm = "";
 
-/*************  ✨ Windsurf Command ⭐  *************/
-/*******  5aa7847a-eeae-4e25-9584-c108fc94c0eb  *******/
 function displayFeaturedEvents(events, isSearch = false) {
   const featuredContainer = document.getElementById('featured-events');
   
@@ -71,19 +71,31 @@ function updateLoadMoreButton(totalEvents) {
 
 function loadMoreEvents() {
   currentPage++;
-  const events = JSON.parse(localStorage.getItem('events')) || sampleEvents;
-  displayFeaturedEvents(events);
+  
+  if (isSearchActive) {
+    const results = allEvents.filter(event => 
+      event.name.toLowerCase().includes(searchTerm) || 
+      event.type.toLowerCase().includes(searchTerm)
+    );
+    displayFeaturedEvents(results, true);
+  } else if (currentFilter === "all") {
+    displayFeaturedEvents(allEvents);
+  } else {
+    const filteredEvents = allEvents.filter(event => event.type === currentFilter);
+    displayFeaturedEvents(filteredEvents);
+  }
 }
 
 function updateEvents() {
-  currentPage = 1;
-  const events = JSON.parse(localStorage.getItem('events')) || sampleEvents;
-  initCarousel(events);
+  allEvents = JSON.parse(localStorage.getItem('events')) || sampleEvents;
+  initCarousel(allEvents);
   
-  if (currentFilter === "all") {
-    displayFeaturedEvents(events);
+  if (isSearchActive) {
+    searchEvents(searchTerm);
+  } else if (currentFilter === "all") {
+    displayFeaturedEvents(allEvents);
   } else {
-    const filteredEvents = events.filter(event => event.type === currentFilter);
+    const filteredEvents = allEvents.filter(event => event.type === currentFilter);
     displayFeaturedEvents(filteredEvents);
   }
 }
